@@ -1,6 +1,8 @@
 import argparse
 import logging
 
+LOGFILENAME = "day01.log"
+
 
 def setupParser():
     parser = argparse.ArgumentParser()
@@ -10,10 +12,42 @@ def setupParser():
         action="store_true",
         help="Set loglevel to debug",
     )
+    parser.add_argument(
+        "-lf",
+        "--logfile",
+        action="store_true",
+        help=f"Set logging output to file: {LOGFILENAME}",
+    )
+    parser.add_argument(
+        "-t",
+        "--testinput",
+        action="store_true",
+        help="Use test input data for run",
+    )
+    parser.add_argument(
+        "-s1",
+        "--solution1",
+        action="store_true",
+        help="Only run solution 1",
+    )
+    parser.add_argument(
+        "-s2",
+        "--solution2",
+        action="store_true",
+        help="Only run solution 2",
+    )
 
     args = parser.parse_args()
     if args.debug:
+        print("set log level to debug")
         logging.basicConfig(format="%(message)s", level=logging.DEBUG)
+    if args.logfile:
+        print(f"set logging to output file {LOGFILENAME}")
+        logging.basicConfig(
+            format="%(message)s", level=logging.DEBUG, filename=LOGFILENAME
+        )
+
+    return args
 
 
 def getTestInput():
@@ -59,11 +93,27 @@ def solution_part2(input) -> int:
 
 
 if __name__ == "__main__":
-    setupParser()
-    input = getInput()
+    args = setupParser()
 
-    sol1 = solution_part1(input)
-    print("Part 1: ", sol1)
+    if args.testinput:
+        print("using testdata")
+        print("--------------\n")
+        input = getTestInput()
+    else:
+        print("using input file")
+        print("----------------\n")
+        input = getInput()
 
-    # sol2 = solution_part2(input)
-    # print("Part 2: ", sol2)
+    if args.solution1 is False and args.solution2 is False:
+        args.solution1 = True
+        args.solution2 = True
+
+    if args.solution1:
+        sol1 = solution_part1(input)
+        print(f"Part 1: {sol1}")
+        print("=======\n")
+
+    if args.solution2:
+        sol2 = solution_part2(input)
+        print(f"Part 2: {sol2}")
+        print("=======\n")
