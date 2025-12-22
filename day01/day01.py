@@ -2,6 +2,8 @@ import argparse
 import logging
 
 LOGFILENAME = "day01.log"
+DIAL_WIDTH = 100
+INITIAL_DIAL_POSITION = 50
 
 
 def setup_parser():
@@ -70,19 +72,29 @@ def get_input():
     return lines
 
 
+def get_direction(turn: str) -> int:
+    if turn[0] == "R":
+        return 1
+    else:
+        return -1
+
+
+def get_value(turn: str) -> int:
+    return int(turn[1:])
+
+
 def solution_part1(input) -> int:
     logging.debug("solution_part1")
     zero_count = 0
-    position = 50
-    dial_width = 100
+    position = INITIAL_DIAL_POSITION
 
     for turn in input:
-        dir = 1 if turn[0] == "R" else -1
-        value = int(turn[1:])
+        direction = get_direction(turn)
+        value = get_value(turn)
 
-        logging.debug(f"dir: {turn[0]} ({dir}) ({value})")
+        logging.debug(f"direction: {turn[0]} ({direction}) ({value})")
 
-        position = (position + dir * value) % dial_width
+        position = (position + direction * value) % DIAL_WIDTH
         logging.debug(f"position: {position}")
         if position == 0:
             zero_count += 1
@@ -96,18 +108,17 @@ def solution_part1(input) -> int:
 def solution_part2(input) -> int:
     logging.debug("solution_part2")
     zero_count = 0
-    old_position = 50
-    dial_width = 100
+    old_position = INITIAL_DIAL_POSITION
 
     for turn in input:
-        dir = 1 if turn[0] == "R" else -1
-        value = int(turn[1:])
+        direction = get_direction(turn)
+        value = get_value(turn)
 
         logging.debug(f"turn: {turn}")
-        logging.debug(f"dir: {dir}")
+        logging.debug(f"direction: {direction}")
 
-        rotation = value / dial_width
-        new_position = (old_position + dir * value) % dial_width
+        rotation = value / DIAL_WIDTH
+        new_position = (old_position + direction * value) % DIAL_WIDTH
 
         logging.debug(f"old_position: {old_position}")
         logging.debug(f"new_position: {new_position}")
@@ -115,7 +126,7 @@ def solution_part2(input) -> int:
 
         if abs(rotation) >= 1:
             to_add = int(abs(rotation))
-            logging.debug(f"\tRotation Rule - to_add: {to_add}")
+            logging.debug(f"\tDial turned more than once - to_add: {to_add}")
             zero_count += to_add
 
         if new_position == 0:
