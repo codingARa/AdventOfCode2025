@@ -1,5 +1,6 @@
 import argparse
 import logging
+from pathlib import Path
 
 LOGFILENAME = "day01.log"
 DIAL_WIDTH = 100
@@ -40,14 +41,18 @@ def setup_parser():
     )
 
     args = parser.parse_args()
+    log_kwargs = None
+    if args.debug or args.logfile:
+        log_kwargs = {"format": "%(message)s", "level": logging.DEBUG}
+        if args.logfile:
+            log_kwargs["filename"] = LOGFILENAME
+            print(f"set logging to output file {LOGFILENAME}")
+
     if args.debug:
         print("set log level to debug")
-        logging.basicConfig(format="%(message)s", level=logging.DEBUG)
-    if args.logfile:
-        print(f"set logging to output file {LOGFILENAME}")
-        logging.basicConfig(
-            format="%(message)s", level=logging.DEBUG, filename=LOGFILENAME
-        )
+
+    if log_kwargs is not None:
+        logging.basicConfig(**log_kwargs)
 
     return args
 
@@ -67,7 +72,8 @@ def test_part2():
 
 
 def get_input():
-    with open("input.txt") as file:
+    input_path = Path(__file__).parent / "input.txt"
+    with open(input_path) as file:
         lines = [line for line in file.read().split("\n") if line]
     return lines
 
