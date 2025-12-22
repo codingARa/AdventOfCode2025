@@ -137,10 +137,10 @@ def solution_part2(input) -> int:
             logging.debug("---\n")
             continue
 
-        if dir > 0 and new_position < old_position:
+        if direction > 0 and new_position < old_position:
             zero_count += 1
             logging.debug(f"\tDial past 0 with dir > 0")
-        elif dir < 0 and new_position > old_position and old_position != 0:
+        elif direction < 0 and new_position > old_position and old_position != 0:
             zero_count += 1
             logging.debug(f"\tDial past 0 with dir < 0")
 
