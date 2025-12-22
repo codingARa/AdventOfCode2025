@@ -61,16 +61,6 @@ def get_test_input():
     return ["L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"]
 
 
-def test_part1():
-    test_input = get_test_input()
-    assert solution_part1(test_input) == 3
-
-
-def test_part2():
-    test_input = get_test_input()
-    assert solution_part2(test_input) == 6
-
-
 def get_input():
     input_path = Path(__file__).parent / "input.txt"
     with open(input_path) as file:

@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-python3 -m pytest day01.py
+cd "$(dirname "$0")"
+python3 -m pytest test_day01.py
