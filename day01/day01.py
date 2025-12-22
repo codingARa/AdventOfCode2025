@@ -94,7 +94,7 @@ def solution_part1(input) -> int:
         logging.debug(f"position: {position}")
         if position == 0:
             zero_count += 1
-            logging.debug(f"\tDial points to 0")
+            logging.debug("\tDial points to 0")
             logging.debug(f"zero_count: {zero_count}")
         logging.debug("---\n")
 
@@ -128,17 +128,17 @@ def solution_part2(input) -> int:
         if new_position == 0:
             zero_count += 1
             old_position = new_position
-            logging.debug(f"\tDial points to 0")
+            logging.debug("\tDial points to 0")
             logging.debug(f"zero_count: {zero_count}")
             logging.debug("---\n")
             continue
 
         if direction > 0 and new_position < old_position:
             zero_count += 1
-            logging.debug(f"\tDial past 0 with dir > 0")
+            logging.debug("\tDial past 0 with dir > 0")
         elif direction < 0 and new_position > old_position and old_position != 0:
             zero_count += 1
-            logging.debug(f"\tDial past 0 with dir < 0")
+            logging.debug("\tDial past 0 with dir < 0")
 
         old_position = new_position
 
