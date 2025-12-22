@@ -94,7 +94,51 @@ def solution_part1(input) -> int:
 
 
 def solution_part2(input) -> int:
-    return 4
+    logging.debug("solution_part2")
+    zero_count = 0
+    old_position = 50
+    dial_width = 100
+
+    for turn in input:
+        dir = 1 if turn[0] == "R" else -1
+        value = int(turn[1:])
+
+        logging.debug(f"turn: {turn}")
+        logging.debug(f"dir: {dir}")
+
+        rotation = value / dial_width
+        new_position = (old_position + dir*value) % dial_width
+
+        logging.debug(f"old_position: {old_position}")
+        logging.debug(f"new_position: {new_position}")
+        logging.debug(f"rotation: {rotation}")
+
+        if abs(rotation) >= 1:
+            to_add = int(abs(rotation))
+            logging.debug(f"\tRotation Rule - to_add: {to_add}")
+            zero_count += to_add
+
+        if new_position == 0:
+            zero_count += 1
+            old_position = new_position
+            logging.debug(f"\tDial points to 0")
+            logging.debug(f"zero_count: {zero_count}")
+            logging.debug("---\n")
+            continue
+
+        if dir > 0 and new_position < old_position:
+            zero_count += 1
+            logging.debug(f"\tDial past 0 with dir > 0")
+        elif dir < 0 and new_position > old_position and old_position != 0:
+            zero_count += 1
+            logging.debug(f"\tDial past 0 with dir < 0")
+
+        old_position = new_position
+
+        logging.debug(f"zero_count: {zero_count}")
+        logging.debug("---\n")
+
+    return zero_count
 
 
 if __name__ == "__main__":
