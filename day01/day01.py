@@ -107,7 +107,7 @@ def solution_part2(input) -> int:
         logging.debug(f"dir: {dir}")
 
         rotation = value / dial_width
-        new_position = (old_position + dir*value) % dial_width
+        new_position = (old_position + dir * value) % dial_width
 
         logging.debug(f"old_position: {old_position}")
         logging.debug(f"new_position: {new_position}")
