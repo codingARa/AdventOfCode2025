@@ -4,7 +4,7 @@ import logging
 LOGFILENAME = "day01.log"
 
 
-def setupParser():
+def setup_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-d",
@@ -50,21 +50,21 @@ def setupParser():
     return args
 
 
-def getTestInput():
+def get_test_input():
     return ["L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"]
 
 
 def test_part1():
-    test_input = getTestInput()
+    test_input = get_test_input()
     assert solution_part1(test_input) == 3
 
 
 def test_part2():
-    test_input = getTestInput()
+    test_input = get_test_input()
     assert solution_part2(test_input) == 6
 
 
-def getInput():
+def get_input():
     with open("input.txt") as file:
         lines = [line for line in file.read().split("\n") if line]
     return lines
@@ -142,16 +142,16 @@ def solution_part2(input) -> int:
 
 
 if __name__ == "__main__":
-    args = setupParser()
+    args = setup_parser()
 
     if args.testinput:
         print("using testdata")
         print("--------------\n")
-        input = getTestInput()
+        input = get_test_input()
     else:
         print("using input file")
         print("----------------\n")
-        input = getInput()
+        input = get_input()
 
     if args.solution1 is False and args.solution2 is False:
         args.solution1 = True
