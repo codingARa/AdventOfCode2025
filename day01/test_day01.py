@@ -1,5 +1,3 @@
-import pytest
-
 from day01 import get_test_input, solution_part1, solution_part2
 
 
