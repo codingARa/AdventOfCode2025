@@ -57,11 +57,11 @@ def setup_parser():
     return args
 
 
-def get_test_input():
+def get_puzzle_test_input():
     return ["L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"]
 
 
-def get_input():
+def get_puzzle_input():
     input_path = Path(__file__).parent / "input.txt"
     with open(input_path) as file:
         lines = [line for line in file.read().split("\n") if line]
@@ -79,12 +79,12 @@ def get_value(turn: str) -> int:
     return int(turn[1:])
 
 
-def solution_part1(input) -> int:
+def solution_part1(puzzle_input: list[str]) -> int:
     logging.debug("solution_part1")
     zero_count = 0
     position = INITIAL_DIAL_POSITION
 
-    for turn in input:
+    for turn in puzzle_input:
         direction = get_direction(turn)
         value = get_value(turn)
 
@@ -101,12 +101,12 @@ def solution_part1(input) -> int:
     return zero_count
 
 
-def solution_part2(input) -> int:
+def solution_part2(puzzle_input: list[str]) -> int:
     logging.debug("solution_part2")
     zero_count = 0
     old_position = INITIAL_DIAL_POSITION
 
-    for turn in input:
+    for turn in puzzle_input:
         direction = get_direction(turn)
         value = get_value(turn)
 
@@ -154,22 +154,22 @@ if __name__ == "__main__":
     if args.testinput:
         print("using testdata")
         print("--------------\n")
-        input = get_test_input()
+        puzzle_input = get_test_puzzle_input()
     else:
-        print("using input file")
+        print("using puzzle input file")
         print("----------------\n")
-        input = get_input()
+        puzzle_input = get_puzzle_input()
 
     if args.solution1 is False and args.solution2 is False:
         args.solution1 = True
         args.solution2 = True
 
     if args.solution1:
-        sol1 = solution_part1(input)
-        print(f"Part 1: {sol1}")
+        sol1 = solution_part1(puzzle_input)
+        print(f"solution part 1: {sol1}")
         print("=======\n")
 
     if args.solution2:
-        sol2 = solution_part2(input)
-        print(f"Part 2: {sol2}")
+        sol2 = solution_part2(puzzle_input)
+        print(f"solution part 2: {sol2}")
         print("=======\n")
