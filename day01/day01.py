@@ -66,8 +66,8 @@ def test_part2():
 
 def getInput():
     with open("input.txt") as file:
-        line = [l for l in file.read().split("\n") if l]
-    return line
+        lines = [line for line in file.read().split("\n") if line]
+    return lines
 
 
 def solution_part1(input) -> int:
@@ -75,15 +75,20 @@ def solution_part1(input) -> int:
     zero_count = 0
     position = 50
     dial_width = 100
+
     for turn in input:
         dir = 1 if turn[0] == "R" else -1
         value = int(turn[1:])
-        logging.debug(f"turn[0]: {turn[0]}")
-        logging.debug(f"dir: {dir}")
-        logging.debug(f"value: {value}")
+
+        logging.debug(f"dir: {turn[0]} ({dir}) ({value})")
+
         position = (position + dir * value) % dial_width
+        logging.debug(f"position: {position}")
         if position == 0:
             zero_count += 1
+            logging.debug(f"\tDial points to 0")
+            logging.debug(f"zero_count: {zero_count}")
+        logging.debug("---\n")
 
     return zero_count
 
