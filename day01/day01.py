@@ -61,7 +61,7 @@ def test_part1():
 
 def test_part2():
     test_input = getTestInput()
-    assert solution_part2(test_input) == 4
+    assert solution_part2(test_input) == 6
 
 
 def getInput():
