@@ -1,71 +1,18 @@
-import argparse
 import logging
+import sys
+from functools import partial
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from aoc_utils import DaySolution, get_puzzle_input, run_solutions, setup_parser
 
 LOGFILENAME = "day01.log"
 DIAL_WIDTH = 100
 INITIAL_DIAL_POSITION = 50
 
 
-def setup_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-d",
-        "--debug",
-        action="store_true",
-        help="Set loglevel to debug",
-    )
-    parser.add_argument(
-        "-lf",
-        "--logfile",
-        action="store_true",
-        help=f"Set logging output to file: {LOGFILENAME}",
-    )
-    parser.add_argument(
-        "-t",
-        "--testinput",
-        action="store_true",
-        help="Use test input data for run",
-    )
-    parser.add_argument(
-        "-s1",
-        "--solution1",
-        action="store_true",
-        help="Only run solution 1",
-    )
-    parser.add_argument(
-        "-s2",
-        "--solution2",
-        action="store_true",
-        help="Only run solution 2",
-    )
-
-    args = parser.parse_args()
-    log_kwargs = None
-    if args.debug or args.logfile:
-        log_kwargs = {"format": "%(message)s", "level": logging.DEBUG}
-        if args.logfile:
-            log_kwargs["filename"] = LOGFILENAME
-            print(f"set logging to output file {LOGFILENAME}")
-
-    if args.debug:
-        print("set log level to debug")
-
-    if log_kwargs is not None:
-        logging.basicConfig(**log_kwargs)
-
-    return args
-
-
 def get_puzzle_test_input():
     return ["L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82"]
-
-
-def get_puzzle_input():
-    input_path = Path(__file__).parent / "input.txt"
-    with open(input_path) as file:
-        lines = [line for line in file.read().split("\n") if line]
-    return lines
 
 
 def get_direction(turn: str) -> int:
@@ -149,27 +96,11 @@ def solution_part2(puzzle_input: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    args = setup_parser()
-
-    if args.testinput:
-        print("using testdata")
-        print("--------------\n")
-        puzzle_input = get_test_puzzle_input()
-    else:
-        print("using puzzle input file")
-        print("----------------\n")
-        puzzle_input = get_puzzle_input()
-
-    if args.solution1 is False and args.solution2 is False:
-        args.solution1 = True
-        args.solution2 = True
-
-    if args.solution1:
-        sol1 = solution_part1(puzzle_input)
-        print(f"solution part 1: {sol1}")
-        print("=======\n")
-
-    if args.solution2:
-        sol2 = solution_part2(puzzle_input)
-        print(f"solution part 2: {sol2}")
-        print("=======\n")
+    args = setup_parser(LOGFILENAME)
+    day_solution = DaySolution(
+        get_test_puzzle_input=get_puzzle_test_input,
+        get_puzzle_input=partial(get_puzzle_input, Path(__file__)),
+        solution_part1=solution_part1,
+        solution_part2=solution_part2,
+    )
+    run_solutions(args, day_solution)
