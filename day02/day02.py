@@ -1,10 +1,11 @@
 import logging
 import sys
-from functools import partial
+from dataclasses import dataclass
+from functools import partial, reduce
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from aoc_utils import DaySolution, get_puzzle_input, run_solutions, setup_parser
+from aoc_utils import DaySolution, run_solutions, setup_parser
 
 LOGFILENAME = "day02.log"
 
@@ -35,14 +36,102 @@ def test_part2():
     assert solution_part2(test_input) == 0
 
 
+def get_puzzle_input(script_path: Path) -> list[str]:
+    input_path = script_path.parent / "input.txt"
+    with open(input_path) as file:
+        lines = file.readlines()
+        id_pairs = []
+        for line in lines:
+            line = line.strip("\n")
+            id_pairs += line.split(",")
+    return id_pairs
+
+
+@dataclass
+class PuzzleRange:
+    start: int
+    end: int
+
+
+def get_puzzle_ranges_from_puzzle_input(puzzle_input: list[str]) -> list[PuzzleRange]:
+    ranges = []
+    for line in puzzle_input:
+        range_pair = line.split("-")
+        ranges.append(PuzzleRange(start=int(range_pair[0]), end=int(range_pair[1])))
+    return ranges
+
+
 def solution_part1(puzzle_input: list[str]) -> int:
     logging.debug("solution_part1")
-    return 1
+    puzzle_ranges = get_puzzle_ranges_from_puzzle_input(puzzle_input)
+    invalid_ids = []
+    for p_range in puzzle_ranges:
+        logging.debug(f"checking range {p_range.start}-{p_range.end} ...")
+        for current_id in range(p_range.start, p_range.end + 1):
+            if id_is_invalid_part1(str(current_id)) is True:
+                logging.debug(f"The id {current_id} IS invalid!")
+                invalid_ids.append(current_id)
+            else:
+                logging.debug(f"The id {current_id} is NOT invalid...")
+            logging.debug("---\n")
+    print(f"puzzle ranges: {puzzle_ranges}")
+    print(f"invalid ids: {invalid_ids}")
+
+    answer = sum(invalid_ids)
+    print(f"answer: {answer}")
+
+    return answer
+
+
+def chunk_string(string: str, chunk_length: int) -> list[str]:
+    chunks = []
+    for index in range(0, int(len(string)), chunk_length):
+        chunks.append(string[index : index + chunk_length])
+    return chunks
+
+
+def id_is_invalid_part1(current_id: str) -> bool:
+    length_current_id = len(current_id)
+    logging.debug(f"checking id {current_id} ...")
+    if (length_current_id % 2) == 0:
+        substrings = chunk_string(current_id, int(length_current_id / 2))
+        return all(x == substrings[0] for x in substrings)
+
+
+def id_is_invalid_part2(current_id: str) -> bool:
+    length_current_id = len(current_id)
+    logging.debug(f"checking id {current_id} ...")
+    for index_width in range(int(length_current_id / 2), 0, -1):
+        if (length_current_id % index_width) == 0:
+            logging.debug(f"half-length of {current_id} is divisible by {index_width}")
+            substrings = chunk_string(current_id, index_width)
+            logging.debug(f"substrings: {substrings}")
+            match_found = all(x == substrings[0] for x in substrings)
+            if match_found is True:
+                return True
+    return False
 
 
 def solution_part2(puzzle_input: list[str]) -> int:
     logging.debug("solution_part2")
-    return 1
+    puzzle_ranges = get_puzzle_ranges_from_puzzle_input(puzzle_input)
+    invalid_ids = []
+    for p_range in puzzle_ranges:
+        logging.debug(f"checking range {p_range.start}-{p_range.end} ...")
+        for current_id in range(p_range.start, p_range.end + 1):
+            if id_is_invalid_part2(str(current_id)) is True:
+                logging.debug(f"The id {current_id} IS invalid!")
+                invalid_ids.append(current_id)
+            else:
+                logging.debug(f"The id {current_id} is NOT invalid...")
+            logging.debug("---\n")
+    print(f"puzzle ranges: {puzzle_ranges}")
+    print(f"invalid ids: {invalid_ids}")
+
+    answer = sum(invalid_ids)
+    print(f"answer: {answer}")
+
+    return answer
 
 
 if __name__ == "__main__":
