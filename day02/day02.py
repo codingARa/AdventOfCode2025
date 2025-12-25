@@ -5,9 +5,12 @@ from functools import partial, reduce
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from aoc_utils import DaySolution, run_solutions, setup_parser
 
 LOGFILENAME = "day02.log"
+TEST_RESULT_PART1 = 1227775554
+TEST_RESULT_PART2 = 4174379265
 
 
 def get_puzzle_test_input():
@@ -28,12 +31,12 @@ def get_puzzle_test_input():
 
 def test_part1():
     test_input = get_puzzle_test_input()
-    assert solution_part1(test_input) == 1227775554
+    assert solution_part1(test_input) == TEST_RESULT_PART1
 
 
 def test_part2():
     test_input = get_puzzle_test_input()
-    assert solution_part2(test_input) == 0
+    assert solution_part2(test_input) == TEST_RESULT_PART2
 
 
 def get_puzzle_input(script_path: Path) -> list[str]:
@@ -61,9 +64,17 @@ def get_puzzle_ranges_from_puzzle_input(puzzle_input: list[str]) -> list[PuzzleR
     return ranges
 
 
+def chunk_string(string: str, chunk_length: int) -> list[str]:
+    chunks = []
+    for index in range(0, int(len(string)), chunk_length):
+        chunks.append(string[index : index + chunk_length])
+    return chunks
+
+
 def solution_part1(puzzle_input: list[str]) -> int:
     logging.debug("solution_part1")
     puzzle_ranges = get_puzzle_ranges_from_puzzle_input(puzzle_input)
+    logging.debug(f"puzzle ranges: {puzzle_ranges}")
     invalid_ids = []
     for p_range in puzzle_ranges:
         logging.debug(f"checking range {p_range.start}-{p_range.end} ...")
@@ -74,20 +85,11 @@ def solution_part1(puzzle_input: list[str]) -> int:
             else:
                 logging.debug(f"The id {current_id} is NOT invalid...")
             logging.debug("---\n")
-    print(f"puzzle ranges: {puzzle_ranges}")
-    print(f"invalid ids: {invalid_ids}")
+    logging.debug(f"invalid ids: {invalid_ids}")
 
     answer = sum(invalid_ids)
-    print(f"answer: {answer}")
-
+    logging.debug(f"answer: {answer}")
     return answer
-
-
-def chunk_string(string: str, chunk_length: int) -> list[str]:
-    chunks = []
-    for index in range(0, int(len(string)), chunk_length):
-        chunks.append(string[index : index + chunk_length])
-    return chunks
 
 
 def id_is_invalid_part1(current_id: str) -> bool:
@@ -96,20 +98,6 @@ def id_is_invalid_part1(current_id: str) -> bool:
     if (length_current_id % 2) == 0:
         substrings = chunk_string(current_id, int(length_current_id / 2))
         return all(x == substrings[0] for x in substrings)
-
-
-def id_is_invalid_part2(current_id: str) -> bool:
-    length_current_id = len(current_id)
-    logging.debug(f"checking id {current_id} ...")
-    for index_width in range(int(length_current_id / 2), 0, -1):
-        if (length_current_id % index_width) == 0:
-            logging.debug(f"half-length of {current_id} is divisible by {index_width}")
-            substrings = chunk_string(current_id, index_width)
-            logging.debug(f"substrings: {substrings}")
-            match_found = all(x == substrings[0] for x in substrings)
-            if match_found is True:
-                return True
-    return False
 
 
 def solution_part2(puzzle_input: list[str]) -> int:
@@ -125,13 +113,25 @@ def solution_part2(puzzle_input: list[str]) -> int:
             else:
                 logging.debug(f"The id {current_id} is NOT invalid...")
             logging.debug("---\n")
-    print(f"puzzle ranges: {puzzle_ranges}")
-    print(f"invalid ids: {invalid_ids}")
+    logging.debug(f"invalid ids: {invalid_ids}")
 
     answer = sum(invalid_ids)
-    print(f"answer: {answer}")
-
+    logging.debug(f"answer: {answer}")
     return answer
+
+
+def id_is_invalid_part2(current_id: str) -> bool:
+    length_current_id = len(current_id)
+    logging.debug(f"checking id {current_id} ...")
+    for index_width in range(int(length_current_id / 2), 0, -1):
+        if (length_current_id % index_width) == 0:
+            logging.debug(f"half-length of {current_id} is divisible by {index_width}")
+            substrings = chunk_string(current_id, index_width)
+            logging.debug(f"substrings: {substrings}")
+            match_found = all(x == substrings[0] for x in substrings)
+            if match_found is True:
+                return True
+    return False
 
 
 if __name__ == "__main__":
