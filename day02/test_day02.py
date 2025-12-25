@@ -8,4 +8,4 @@ def test_part1():
 
 def test_part2():
     test_input = get_puzzle_test_input()
-    assert solution_part2(test_input) == 6
+    assert solution_part2(test_input) == 4174379265
