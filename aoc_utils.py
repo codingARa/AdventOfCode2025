@@ -70,7 +70,7 @@ def run_solutions(args, day_solution: DaySolution) -> None:
     """Execute solutions based on command line arguments."""
     if args.testinput:
         print("using testdata\n")
-        puzzle_input = day_solution.get_test_puzzle_input()
+        puzzle_input = day_solution.get_puzzle_test_input()
     else:
         print("using puzzle input file\n")
         puzzle_input = day_solution.get_puzzle_input()
