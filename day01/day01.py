@@ -4,11 +4,19 @@ from functools import partial
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from aoc_utils import DaySolution, get_puzzle_input, run_solutions, setup_parser
+from aoc_utils import DaySolution, run_solutions, setup_parser
 
 LOGFILENAME = "day01.log"
 DIAL_WIDTH = 100
 INITIAL_DIAL_POSITION = 50
+
+
+def get_puzzle_input(script_path: Path) -> list[str]:
+    """Read puzzle input from input.txt in the same directory as the script."""
+    input_path = script_path.parent / "input.txt"
+    with open(input_path) as file:
+        lines = [line for line in file.read().split("\n") if line]
+    return lines
 
 
 def get_puzzle_test_input():
@@ -98,7 +106,7 @@ def solution_part2(puzzle_input: list[str]) -> int:
 if __name__ == "__main__":
     args = setup_parser(LOGFILENAME)
     day_solution = DaySolution(
-        get_test_puzzle_input=get_puzzle_test_input,
+        get_puzzle_test_input=get_puzzle_test_input,
         get_puzzle_input=partial(get_puzzle_input, Path(__file__)),
         solution_part1=solution_part1,
         solution_part2=solution_part2,

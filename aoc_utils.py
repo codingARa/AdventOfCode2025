@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Callable
 
 
-def setup_parser(logfilename: str):
+def setup_parser(logfilename: str) -> argparse.Namespace:
     """Setup argument parser with common AoC options."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -51,30 +51,22 @@ def setup_parser(logfilename: str):
         print("set log level to debug")
 
     if log_kwargs is not None:
-        logging.basicConfig(**log_kwargs)
+        logging.basicConfig(force=True, **log_kwargs)
 
     return args
-
-
-def get_puzzle_input(script_path: Path):
-    """Read puzzle input from input.txt in the same directory as the script."""
-    input_path = script_path.parent / "input.txt"
-    with open(input_path) as file:
-        lines = [line for line in file.read().split("\n") if line]
-    return lines
 
 
 @dataclass
 class DaySolution:
     """Container for daily AoC solution functions."""
 
-    get_test_puzzle_input: Callable
+    get_puzzle_test_input: Callable
     get_puzzle_input: Callable
     solution_part1: Callable
     solution_part2: Callable
 
 
-def run_solutions(args, day_solution: DaySolution):
+def run_solutions(args, day_solution: DaySolution) -> None:
     """Execute solutions based on command line arguments."""
     if args.testinput:
         print("using testdata\n")

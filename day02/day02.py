@@ -66,6 +66,8 @@ def get_puzzle_ranges_from_puzzle_input(puzzle_input: list[str]) -> list[PuzzleR
 
 
 def chunk_string(string: str, chunk_length: int) -> list[str]:
+    if chunk_length <= 0:
+        raise ValueError(f"chunk_length must be greater than 0, got {chunk_length}")
     chunks = []
     for index in range(0, len(string), chunk_length):
         chunks.append(string[index : index + chunk_length])
@@ -124,7 +126,7 @@ def id_is_invalid_part2(current_id: str) -> bool:
     logging.debug(f"checking id {current_id} ...")
     for index_width in range(length_current_id // 2, 0, -1):
         if (length_current_id % index_width) == 0:
-            logging.debug(f"half-length of {current_id} is divisible by {index_width}")
+            logging.debug(f"length of {current_id} is divisible by {index_width}")
             substrings = chunk_string(current_id, index_width)
             logging.debug(f"substrings: {substrings}")
             match_found = all(x == substrings[0] for x in substrings)
@@ -136,7 +138,7 @@ def id_is_invalid_part2(current_id: str) -> bool:
 if __name__ == "__main__":
     args = setup_parser(LOGFILENAME)
     day_solution = DaySolution(
-        get_test_puzzle_input=get_puzzle_test_input,
+        get_puzzle_test_input=get_puzzle_test_input,
         get_puzzle_input=partial(get_puzzle_input, Path(__file__)),
         solution_part1=solution_part1,
         solution_part2=solution_part2,
