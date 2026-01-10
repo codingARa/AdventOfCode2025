@@ -10,7 +10,7 @@ from aoc_utils import DaySolution, run_solutions, setup_parser
 
 LOGFILENAME = "day03.log"
 TEST_RESULT_PART1 = 357
-TEST_RESULT_PART2 = None  # TODO: set expected result for part 2
+TEST_RESULT_PART2 = 3121910778619
 
 
 def get_puzzle_test_input():
@@ -33,7 +33,6 @@ def test_part2():
 
 
 def get_puzzle_input(script_path: Path) -> list[str]:
-    # TODO: implement reading from input file
     input_path = script_path.parent / "input.txt"
     with open(input_path) as file:
         lines = file.readlines()
@@ -51,6 +50,52 @@ def find_max_pair(line: str) -> int:
     return max_value
 
 
+def find_max_twelve_digit_number(line: str) -> int:
+    DIGIT_COUNT = 12
+    if len(line) < DIGIT_COUNT:
+        raise ValueError(
+            f"Cannot find max {DIGIT_COUNT} digit number in line with less than 12 characters."
+        )
+    max_chars = ""
+    left_index = 0
+    right_index = -DIGIT_COUNT + 1  # start by cutting off 11 chars from the line
+
+    for i in range(0, DIGIT_COUNT):
+        used_line = line[left_index:right_index]
+
+        logging.debug(f"line: {line}")
+        logging.debug(f"used_line: {used_line}")
+        logging.debug(f"left_index: {left_index} - right_index: {right_index}")
+
+        (new_left_index, new_max_char) = find_leftmost_max_digit_in_string(used_line)
+        max_chars += new_max_char
+        left_index += new_left_index + 1
+
+        if right_index is not None:
+            right_index += 1
+        # right_index needs to be set to None when the end of the string is reached
+        if right_index == 0:
+            right_index = None
+
+    return int(max_chars)
+
+
+def find_leftmost_max_digit_in_string(line: str) -> tuple[int, str]:
+    max_char = ""
+    max_value = 0
+    max_index = -1
+    for c_index, c in enumerate(line):
+        c_value = int(c)
+        if c_value > max_value:
+            max_char = c
+            max_value = c_value
+            max_index = c_index
+    logging.debug(
+        f"in line '{line}' leftmost max char is '{max_char}' at index {max_index}"
+    )
+    return (max_index, max_char)
+
+
 def solution_part1(puzzle_input: list[str]) -> int:
     logging.debug("solution_part1")
     max_pairs = []
@@ -61,8 +106,11 @@ def solution_part1(puzzle_input: list[str]) -> int:
 
 def solution_part2(puzzle_input: list[str]) -> int:
     logging.debug("solution_part2")
-    # TODO: implement solution for part 2
-    pass
+    max_numbers = []
+    for line in puzzle_input:
+        max_numbers.append(find_max_twelve_digit_number(line))
+    logging.debug(f"array max_numbers: {max_numbers}")
+    return sum(max_numbers)
 
 
 if __name__ == "__main__":
