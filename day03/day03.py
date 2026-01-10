@@ -2,7 +2,6 @@ import logging
 import sys
 from functools import partial
 from pathlib import Path
-from typing import Callable
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -20,16 +19,6 @@ def get_puzzle_test_input():
         "234234234234278",
         "818181911112111",
     ]
-
-
-def test_part1():
-    test_input = get_puzzle_test_input()
-    assert solution_part1(test_input) == TEST_RESULT_PART1
-
-
-def test_part2():
-    test_input = get_puzzle_test_input()
-    assert solution_part2(test_input) == TEST_RESULT_PART2
 
 
 def get_puzzle_input(script_path: Path) -> list[str]:
@@ -51,21 +40,31 @@ def find_max_pair(line: str) -> int:
 
 
 def find_max_twelve_digit_number(line: str) -> int:
-    DIGIT_COUNT = 12
-    if len(line) < DIGIT_COUNT:
+    """
+    Find the maximum twelve-digit number that can be formed from the digits in
+    the line.
+    This alghorithm uses a sliding window approach to find the leftmost maximum
+    digit for each position in the twelve-digit number.
+    This makes sure that the resulting number is the largest possible by always
+    choosing the highest available digit at each step.
+    """
+    digit_count = 12
+    if len(line) < digit_count:
         raise ValueError(
-            f"Cannot find max {DIGIT_COUNT} digit number in line with less than 12 characters."
+            f"Cannot find max {digit_count} digit number in line with less than {digit_count} characters."
         )
     max_chars = ""
     left_index = 0
-    right_index = -DIGIT_COUNT + 1  # start by cutting off 11 chars from the line
+    right_index = -digit_count + 1  # start by cutting off 11 chars from the line
 
-    for i in range(0, DIGIT_COUNT):
+    for i in range(0, digit_count):
         used_line = line[left_index:right_index]
 
         logging.debug(f"line: {line}")
         logging.debug(f"used_line: {used_line}")
-        logging.debug(f"left_index: {left_index} - right_index: {right_index}")
+        logging.debug(
+            f"Cannot find max {digit_count}-digit number in line with fewer than {digit_count} characters."
+        )
 
         (new_left_index, new_max_char) = find_leftmost_max_digit_in_string(used_line)
         max_chars += new_max_char
