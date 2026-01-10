@@ -15,7 +15,7 @@ RESULT_PART1 = None
 RESULT_PART2 = None
 
 
-def parse_input_lines(lines: str) -> tuple[list[str].list[str]]:
+def parse_input_lines(lines: str) -> tuple[list[str], list[str]]:
     breakline = False
     ranges = []
     orders = []
