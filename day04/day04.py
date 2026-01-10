@@ -86,29 +86,32 @@ def count_and_replace_movable_rolls_from_board(
 
 def solution_part2(puzzle_input: list[list[int]]) -> int:
     logging.debug("solution_part2")
-    new_board = False
-    board = puzzle_input
+    board = [row.copy() for row in puzzle_input]
     rows = len(board)
     columns = len(board[0])
-    max_neighbour_count = 4
     total_count = 0
     iteration = 1
-    while board != new_board:
+
+    while True:
         logging.debug(f"board before iteration\n{board}")
-        if new_board is False:
-            new_board = [row.copy() for row in board]
-        else:
-            board = [row.copy() for row in new_board]
-        new_board, new_count = count_and_replace_movable_rolls_from_board(
-            new_board, rows, columns
+        board_before = [row.copy() for row in board]
+
+        board, new_count = count_and_replace_movable_rolls_from_board(
+            board, rows, columns
         )
         total_count += new_count
+
         logging.debug(
             f"iteration: {iteration}: - new_count: {new_count} -  total_count: {total_count}"
         )
-        logging.debug(f"board after iteration {iteration}:\n{new_board}")
-        logging.debug(f"while-condition broken: {board == new_board}")
+        logging.debug(f"board after iteration {iteration}:\n{board}")
+
+        logging.debug(f"while-condition broken?\n=> {board == board_before}")
+        if board == board_before:
+            break
+
         iteration += 1
+
     return total_count
 
 
