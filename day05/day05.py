@@ -16,15 +16,15 @@ RESULT_PART2 = 347468726696961
 
 
 def parse_input_lines(lines: str) -> tuple[list[str], list[str]]:
-    breakline = False
+    in_orders_section = False
     ranges = []
     orders = []
     for line in lines:
         line = line.strip()
         if line == "":
-            breakline = True
+            in_orders_section = True
             continue
-        if breakline:
+        if in_orders_section:
             orders.append(line)
         else:
             ranges.append(line)
