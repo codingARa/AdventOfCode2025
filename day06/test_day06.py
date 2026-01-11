@@ -13,7 +13,7 @@ from day06 import (
     solution_part2,
 )
 
-PART2_TOO_LOW_VALUE1 = 10227753241159
+PART2_KNOWN_TOO_LOW_VALUE_1 = 10227753241159
 
 
 def test_part1():
@@ -35,7 +35,7 @@ def test_part1_with_known_solution():
 @pytest.mark.skip(reason="Known solution test - skip unless needed")
 def test_part2_with_known_false_solutions():
     puzzle_input = get_puzzle_input(Path(__file__))
-    assert solution_part2(puzzle_input) > PART2_TOO_LOW_VALUE1
+    assert solution_part2(puzzle_input) > PART2_KNOWN_TOO_LOW_VALUE_1
 
 
 @pytest.mark.skip(reason="Known solution test - skip unless needed")

@@ -27,12 +27,12 @@ def parse_input_lines_part1(lines: list[str]) -> tuple[list[list[int]], list[str
     return number_lists, operator_list
 
 
-def parse_input_lines_part2(lines: list[str]):
+def parse_input_lines_part2(lines: list[str]) -> list[tuple[str, ...]]:
     columns = zip(*lines)
     return list(columns)
 
 
-def get_puzzle_test_input():
+def get_puzzle_test_input() -> list[str]:
     return [
         "123 328  51 64 ",
         " 45 64  387 23 ",
@@ -41,7 +41,7 @@ def get_puzzle_test_input():
     ]
 
 
-def get_puzzle_input(script_path: Path):
+def get_puzzle_input(script_path: Path) -> list[str]:
     input_path = script_path.parent / "input.txt"
     with open(input_path) as file:
         lines = file.readlines()
@@ -88,7 +88,6 @@ def get_total_sum_vertically(puzzle_input) -> int:
             operator = new_operator
 
         number_tuple = ts[0:-1]
-        new_number = None
         number_string = ""
         for n in number_tuple:
             number_string += n
@@ -99,7 +98,7 @@ def get_total_sum_vertically(puzzle_input) -> int:
             column_total = None
             continue
         else:
-            new_number = int(number_string.strip())
+            new_number = int(number_string)
 
         match operator:
             case "*":
@@ -115,7 +114,9 @@ def get_total_sum_vertically(puzzle_input) -> int:
             case _:
                 logging.debug("new column")
 
-    total += column_total
+    # column_total for last column - if formatting does not change, it should always be not None
+    if column_total is not None:
+        total += column_total
     return total
 
 
