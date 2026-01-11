@@ -24,8 +24,7 @@ def test_part2():
     assert solution_part2(test_input) == TEST_RESULT_PART2
 
 
-# TODO-ARA: remove before final submission
-# @pytest.mark.skip(reason="Known solution test - skip unless needed")
+@pytest.mark.skip(reason="Known solution test - skip unless needed")
 def test_part1_with_known_solution():
     puzzle_input = get_puzzle_input(Path(__file__))
     assert solution_part1(puzzle_input) == RESULT_PART1

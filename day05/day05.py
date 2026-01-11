@@ -9,10 +9,10 @@ from aoc_utils import DaySolution, run_solutions, setup_parser
 
 LOGFILENAME = "day05.log"
 TEST_RESULT_PART1 = 3
-TEST_RESULT_PART2 = None
+TEST_RESULT_PART2 = 14
 # Expected results for the actual puzzle input - received after solving the puzzle
 RESULT_PART1 = 744
-RESULT_PART2 = None
+RESULT_PART2 = 347468726696961
 
 
 def parse_input_lines(lines: str) -> tuple[list[str], list[str]]:
@@ -79,9 +79,45 @@ def solution_part1(puzzle_input: tuple[list[str], list[str]]) -> int:
     return fresh_ingredients
 
 
+def sort_and_consolidate_ranges(ranges: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    sorted_ranges = ranges.copy()
+    sorted_ranges.sort(key=lambda r: r[0])
+    consolidated_ranges = []
+
+    rp_current = sorted_ranges[0]
+    for i in range(1, len(sorted_ranges)):
+        low_current, high_current = rp_current
+        rp_next = sorted_ranges[i]
+        low_next, high_next = rp_next
+
+        # no range overlap
+        if high_current < low_next:
+            consolidated_ranges.append(rp_current)
+            rp_current = rp_next
+        else:
+            # range overlap
+            high_current = max(high_current, high_next)
+            rp_current = (low_current, high_current)
+
+    # append the last rp_current
+    consolidated_ranges.append(rp_current)
+    return consolidated_ranges
+
+
+def count_fresh_ingredients(ranges: list[tuple[int, int]]) -> int:
+    count = 0
+    for rs in ranges:
+        count += 1 + rs[1] - rs[0]
+    return count
+
+
 def solution_part2(puzzle_input: tuple[list[str], list[str]]) -> int:
     logging.debug("solution_part2")
-    pass
+    ranges_raw = puzzle_input[0]
+    ranges = convert_ranges_to_tuples(ranges_raw)
+    consolidated_ranges = sort_and_consolidate_ranges(ranges)
+    fresh_id_amount = count_fresh_ingredients(consolidated_ranges)
+    return fresh_id_amount
 
 
 if __name__ == "__main__":
