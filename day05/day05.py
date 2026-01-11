@@ -15,7 +15,7 @@ RESULT_PART1 = 744
 RESULT_PART2 = 347468726696961
 
 
-def parse_input_lines(lines: str) -> tuple[list[str], list[str]]:
+def parse_input_lines(lines: list[str]) -> tuple[list[str], list[str]]:
     in_orders_section = False
     ranges = []
     orders = []
