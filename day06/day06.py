@@ -9,13 +9,13 @@ from aoc_utils import DaySolution, run_solutions, setup_parser
 
 LOGFILENAME = "day06.log"
 TEST_RESULT_PART1 = 4277556
-TEST_RESULT_PART2 = None
+TEST_RESULT_PART2 = 3263827
 # Expected results for the actual puzzle input - received after solving the puzzle
 RESULT_PART1 = 5227286044585
-RESULT_PART2 = None
+RESULT_PART2 = 10227753257799
 
 
-def parse_input_lines(lines: list[str]) -> tuple[list[list[int]], list[str]]:
+def parse_input_lines_part1(lines: list[str]) -> tuple[list[list[int]], list[str]]:
     number_lists = []
     operator_list = []
     for line in lines:
@@ -27,21 +27,25 @@ def parse_input_lines(lines: list[str]) -> tuple[list[list[int]], list[str]]:
     return number_lists, operator_list
 
 
+def parse_input_lines_part2(lines: list[str]):
+    columns = zip(*lines)
+    return list(columns)
+
+
 def get_puzzle_test_input():
-    lines = [
-        "123 328  51 64 \n",
-        " 45 64  387 23 \n",
-        "  6 98  215 314\n",
-        "*   +   *   + \n",
+    return [
+        "123 328  51 64 ",
+        " 45 64  387 23 ",
+        "  6 98  215 314",
+        "*   +   *   +  ",
     ]
-    return parse_input_lines(lines)
 
 
 def get_puzzle_input(script_path: Path):
     input_path = script_path.parent / "input.txt"
     with open(input_path) as file:
         lines = file.readlines()
-    return parse_input_lines(lines)
+    return lines
 
 
 def get_total_sum(puzzle_input) -> int:
@@ -69,12 +73,56 @@ def get_total_sum(puzzle_input) -> int:
 
 def solution_part1(puzzle_input) -> int:
     logging.debug("solution_part1")
-    return get_total_sum(puzzle_input)
+    parse_input = parse_input_lines_part1(puzzle_input)
+    return get_total_sum(parse_input)
+
+
+def get_total_sum_vertically(puzzle_input) -> int:
+    total = 0
+
+    column_total = None
+    operator = None
+    for ts in puzzle_input:
+        new_operator = ts[-1]
+        if new_operator != " ":
+            operator = new_operator
+
+        number_tuple = ts[0:-1]
+        new_number = None
+        number_string = ""
+        for n in number_tuple:
+            number_string += n
+        number_string = number_string.strip()
+        if number_string == "":
+            # new column reached
+            total += column_total
+            column_total = None
+            continue
+        else:
+            new_number = int(number_string.strip())
+
+        match operator:
+            case "*":
+                logging.debug("Multiplication")
+                if column_total is None:
+                    column_total = 1
+                column_total *= new_number
+            case "+":
+                logging.debug("Addition")
+                if column_total is None:
+                    column_total = 0
+                column_total += new_number
+            case _:
+                logging.debug("new column")
+
+    total += column_total
+    return total
 
 
 def solution_part2(puzzle_input) -> int:
     logging.debug("solution_part2")
-    pass
+    parse_input = parse_input_lines_part2(puzzle_input)
+    return get_total_sum_vertically(parse_input)
 
 
 if __name__ == "__main__":

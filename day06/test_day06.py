@@ -13,6 +13,8 @@ from day06 import (
     solution_part2,
 )
 
+PART2_TOO_LOW_VALUE1 = 10227753241159
+
 
 def test_part1():
     test_input = get_puzzle_test_input()
@@ -31,7 +33,15 @@ def test_part1_with_known_solution():
     assert solution_part1(puzzle_input) == RESULT_PART1
 
 
-@pytest.mark.skip(reason="Known solution test - skip unless needed")
+# TODO-ARA: insert back before final commit
+# @pytest.mark.skip(reason="Known solution test - skip unless needed")
+def test_part2_with_known_false_solutions():
+    puzzle_input = get_puzzle_input(Path(__file__))
+    assert solution_part2(puzzle_input) > PART2_TOO_LOW_VALUE1
+
+
+# TODO-ARA: insert back before final commit
+# @pytest.mark.skip(reason="Known solution test - skip unless needed")
 def test_part2_with_known_solution():
     puzzle_input = get_puzzle_input(Path(__file__))
     assert solution_part2(puzzle_input) == RESULT_PART2
