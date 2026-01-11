@@ -11,7 +11,7 @@ LOGFILENAME = "day05.log"
 TEST_RESULT_PART1 = 3
 TEST_RESULT_PART2 = None
 # Expected results for the actual puzzle input - received after solving the puzzle
-RESULT_PART1 = None
+RESULT_PART1 = 744
 RESULT_PART2 = None
 
 
@@ -23,6 +23,7 @@ def parse_input_lines(lines: str) -> tuple[list[str], list[str]]:
         line = line.strip()
         if line == "":
             breakline = True
+            continue
         if breakline:
             orders.append(line)
         else:
@@ -54,9 +55,28 @@ def get_puzzle_input(script_path: Path) -> tuple[list[str], list[str]]:
     return parse_input_lines(lines)
 
 
+def convert_ranges_to_tuples(ranges: list[str]) -> list[tuple[int, int]]:
+    range_tuples = []
+    for r in ranges:
+        lower, higher = r.split("-")
+        range_tuples.append((int(lower), int(higher)))
+    return range_tuples
+
+
 def solution_part1(puzzle_input: tuple[list[str], list[str]]) -> int:
     logging.debug("solution_part1")
-    pass
+    ranges_raw = puzzle_input[0]
+    orders = [int(order) for order in puzzle_input[1]]
+    ranges = convert_ranges_to_tuples(ranges_raw)
+    # ingredients are fresh, if their order number can be found in the given ranges
+    fresh_ingredients = 0
+    for order in orders:
+        for rs in ranges:
+            if rs[0] <= order <= rs[1]:
+                fresh_ingredients += 1
+                break
+
+    return fresh_ingredients
 
 
 def solution_part2(puzzle_input: tuple[list[str], list[str]]) -> int:
